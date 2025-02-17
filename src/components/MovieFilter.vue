@@ -1,21 +1,25 @@
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'MovieFilter',
   props: {
-    modelValue: String,
+    modelValue: {
+      type: String,
+      default: 'all'
+    }
   },
   emits: ['update:modelValue'],
-  setup(props, { emit }) {
-    const selectedFilter = ref(props.modelValue || 'all');
-
-    watch(selectedFilter, (newFilter) => {
-      emit('update:modelValue', newFilter);
-    });
-
-    return { selectedFilter };
+  data() {
+    return {
+      selectedFilter: this.modelValue
+    };
   },
+  watch: {
+    selectedFilter(newFilter) {
+      this.$emit('update:modelValue', newFilter);
+    }
+  }
 });
 </script>
 

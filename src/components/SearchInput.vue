@@ -1,21 +1,25 @@
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'SearchInput',
   props: {
-    modelValue: String,
+    modelValue: {
+      type: String,
+      default: ''
+    }
   },
   emits: ['update:modelValue'],
-  setup(props, { emit }) {
-    const searchQuery = ref(props.modelValue || '');
-
-    watch(searchQuery, (newQuery) => {
-      emit('update:modelValue', newQuery);
-    });
-
-    return { searchQuery };
+  data() {
+    return {
+      searchQuery: this.modelValue
+    };
   },
+  watch: {
+    searchQuery(newQuery) {
+      this.$emit('update:modelValue', newQuery);
+    }
+  }
 });
 </script>
 
