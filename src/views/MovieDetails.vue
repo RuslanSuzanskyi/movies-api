@@ -16,23 +16,24 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue';
+import { defineComponent } from 'vue';
 import { useRoute } from 'vue-router';
 import { getMovieDetails } from '@/api/api';
 import type { Movie } from '@/types/movie';
 
 export default defineComponent({
   name: 'MovieDetails',
-  setup() {
+  data() {
+    return {
+      movie: null as Movie | null,
+    };
+  },
+  mounted() {
     const route = useRoute();
-    const movie = ref<Movie | null>(null);
-
-    onMounted(async () => {
-      const movieId = Number(route.params.id);
-      movie.value = await getMovieDetails(movieId);
+    const movieId = Number(route.params.id);
+    getMovieDetails(movieId).then((data) => {
+      this.movie = data;
     });
-
-    return { movie };
   },
 });
 </script>
