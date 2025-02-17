@@ -7,27 +7,35 @@
       <MovieList :movies="filteredMovies" />
     </div>
   </section>
-    
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref, watch } from 'vue';
+import { defineComponent } from 'vue';
 import { getNowPlayingMovies, getPopularMovies, getTopRatedMovies, getUpcomingMovies } from '@/api/api';
 import MovieList from '@/components/MovieList.vue';
-import type { Movie } from '@/types/movie';
 import SearchFilter from '@/components/SearchFilter.vue';
+import type { Movie } from '@/types/movie';
 
 export default defineComponent({
   name: 'Home',
   components: { MovieList, SearchFilter },
-  setup() {
-    const movies = ref<Movie[]>([]);
-    const query = ref('');
-    const filter = ref('all');
-
-    const fetchMovies = async () => {
+  data() {
+    return {
+      movies: [] as Movie[],
+      query: '',
+      filter: 'all',
+    };
+  },
+  watch: {
+    filter: {
+      handler: 'fetchMovies',
+      immediate: true,
+    },
+  },
+  methods: {
+    async fetchMovies() {
       let data: Movie[] = [];
-      switch (filter.value) {
+      switch (this.filter) {
         case 'popular':
           data = await getPopularMovies();
           break;
@@ -50,32 +58,29 @@ export default defineComponent({
           break;
       }
 
-      movies.value = Array.from(new Map(data.map((movie) => [movie.id, movie])).values());
-    };
+      this.movies = Array.from(new Map(data.map((movie) => [movie.id, movie])).values());
+    },
 
-    const filterByQuery = (movies: Movie[], query: string) => {
+    filterByQuery(movies: Movie[], query: string) {
       const queryLower = query.toLowerCase();
       return movies.filter((movie) => movie.title.toLowerCase().includes(queryLower));
-    };
+    },
 
-    const removeDuplicates = (movies: Movie[]) => {
+    removeDuplicates(movies: Movie[]) {
       return movies.reduce((acc, current) => {
         if (!acc.find((item) => item.id === current.id)) {
           acc.push(current);
         }
         return acc;
       }, [] as Movie[]);
-    };
-
-    const filteredMovies = computed(() => {
-      const queriedMovies = filterByQuery(movies.value, query.value);
-      return removeDuplicates(queriedMovies);
-    });
-
-    watch(filter, fetchMovies, { immediate: true });
-
-    return { movies, query, filter, filteredMovies };
+    }
   },
+  computed: {
+    filteredMovies() {
+      const queriedMovies = this.filterByQuery(this.movies, this.query);
+      return this.removeDuplicates(queriedMovies);
+    }
+  }
 });
 </script>
 
