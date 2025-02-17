@@ -58,6 +58,7 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   justify-content: center;
+  text-align: left;
   gap: 1.5rem;
   height: auto;
 }
@@ -86,5 +87,49 @@ export default defineComponent({
   margin-bottom: 4rem;
   color: var(--text-color);
   border: 0.1rem solid var(--text-color);
+}
+
+@media (max-width: 768px) {
+  .movie-details {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .movie-details__poster {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .movie-details__info {
+    padding-left: 0;
+    padding-top: 1.5rem;
+    align-items: center;
+    text-align: left;
+  }
+
+  .movie-details__rating {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .movie-details__overview {
+    margin: 1rem 0;
+  }
+
+  .movie-details__back {
+    margin-top: 2rem;
+    padding: 0.6rem 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .movie-details__rating {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .movie-details__overview {
+    margin: 0.5rem 0;
+  }
 }
 </style>
