@@ -58,7 +58,7 @@ export const searchMovies = async (query: string) => {
     });
     return response.data.results;
   } catch (error) {
-    console.error('Помилка при пошуку фільмів:', error);
+    console.error('Error searching movies', error);
     return [];
   }
 };
