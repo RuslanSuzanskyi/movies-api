@@ -46,7 +46,7 @@ export const getUpcomingMovies = async () => {
     const response = await tmdbApi.get('/movie/upcoming');
     return response.data.results;
   } catch (error) {
-    console.error('Error fetching future movies::', error);
+    console.error('Error fetching future movies:', error);
     return [];
   }
 };
