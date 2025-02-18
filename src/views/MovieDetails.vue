@@ -1,5 +1,5 @@
 <template>
-  <router-link to="/" class="movie-details__back">НА ГОЛОВНУ</router-link>
+  <router-link to="/" class="movie-details__back">BACK</router-link>
   <section class="movie-details" v-if="movie">
     <div class="movie-details__poster">
       <img :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path" :alt="movie.title" />
